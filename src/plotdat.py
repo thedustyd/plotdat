@@ -1,44 +1,13 @@
 #!/usr/bin/python -E
-
-# Available Options:
 #
-#  -m [column spec]		: Specify columns to use as dependent variable (y) from data file 
-#  example column spec: "3" or "1 2 4"
-#  -M [col names ...]	: Specify column names
-#  example column name: "E_a E_b"
-#  -o [out file name]	: Specify output image file name without extension
-#  -c					: Catenate all plots into one image
-#  -f [gen spec]		: File name generation pattern specification using 
-#  -F [gen spec]		: 
-#  example gen spec: "1" or "2,9"
-#  -d [delim char]		: Specify file name generation delimiter character
-#  -D [delim char]		:
-#  default delim char: "_"
-#  -h					: Data files contain header lines
-#  -H [py options]		: Data files contain header lines with useful info
-#  -x "[label1 ...]"	: Specify axis labels
-#  example labels: "energy time"
-#  -l [gplot 'with' cmd]: Set the linestyle in GNUPLOT syntax
-#  -p [gp options]		: Options to pass to gnuplot for every invocation
-#  -v					: Verbose
-#  -V					: Super verbose (useful for debug)
+#	All options: (not all implemented yet)
 #
-# Specific 3D plotting options
-#
-#  -3					: Set 3D plot mode
-#  -w [xa,ya,sc,scz]	: Set view properties
-#  example view properties: "60,30,0.5,1"
-#  -i					: Set number of isolines
-
-#
-#	All options:
-#
-#	--3D-mode							: Turn on 3D plotting mode
+#	--3D-mode							: Use 3D plotting mode
 #
 #	-a [axis names...]					: Axis names, first three strings delimited by '\' characters
 #	example: -a "Current (A)\Voltage (V)" or -a "X\Y\Z"
 #
-#	--axis-name-delim [character]		: Delimiter character for axis names string in '-a' option
+#	--axis-name-delim [character]		: Delimiter character for axis names string in '-a'
 #
 #	-c									: Create single image from data files
 #	--catenate							: Create single image from data files long form
@@ -55,7 +24,7 @@
 #	--gen-filemode-spec [gen pattern]	:
 #	example: --gen-filemode-spec="4" or --gen-filemode-spec "2 3"
 #
-#	--gnuplot-options [options]			:
+#	--gnuplot-options [options]			: Pass options to gnuplot invocations
 #
 #	-h									: Help output
 #
@@ -65,14 +34,19 @@
 #	-m [column spec]					: Specify data columns to plot from data file
 #	example: -m "3" or -m "1 2 5"
 #	-M [column names...]				: Specify the names of data columns specified with '-m'
-#	example: -M "Metres Millimeters"
+#	example: -M "Metres Millimeters" (spaces delimit)
+#	TODO: Fix the inability to have spaces in the column names
 #
 #	-o [output image name]				: Specify output image name
 #	--output-terminal					:
 #	--image-font [fontspec]				:
 #	--image-size [sizespec]				:
 #
+#	-l [legend pos]						: Allows the legend to be rendered and where
+#
 #	-s [value separator]				: Specify value delimiting character in data files
+#
+#	-t [graph title]					: Specify graph title, omitted if not specified
 #
 #	-v									: Verbose output
 #	-V									: Version information
@@ -86,6 +60,18 @@
 #	-X [xaxis_num]						:
 #	-Y [yaxis_num]						:
 #	-Z [zaxis_num]						:
+#
+# Copyright (C) {2013-2014}  {Louis Fry}
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
 
 # Python specific

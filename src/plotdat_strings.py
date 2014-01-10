@@ -2,13 +2,31 @@
 #
 # strings for plotdat.py program
 #
-# Author:       Louis Fry
-# Date:         08/11/2013
+# Copyright (C) {2013-2014}  {Louis Fry}
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
 
 # Version information
 version_info = \
-"plotdat version 2.0."
+"""plotdat version 0.1, Copyright (C) 2013-2014 Louis Fry
+comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to redistribute it under certain
+conditions; see the license file provided for details."""
+
+# Help
+help = \
+"""
+
+"""
 
 # Description
 plotdat_desc = \
@@ -16,7 +34,7 @@ plotdat_desc = \
 
 # Short options
 short_options = \
-'a:cDf:hl:m:M:o:s:vVx:y:z:'
+'a:cDf:hl:m:M:o:s:t:vVx:y:z:'
 
 # Long options
 long_options = \
@@ -53,7 +71,9 @@ script_onedf_opts = \
 	"xaxis_range=",
 	"yaxis_range=",
 	"data_col_numbers=",
-	"data_col_names="
+	"data_col_names=",
+	"graph_title=",
+	"legend_spec="
 ]
 
 script_multidf_opts = \
@@ -66,7 +86,9 @@ script_multidf_opts = \
 	"xaxis_range=",
 	"yaxis_range=",
 	"data_col_numbers=",
-	"data_col_names="
+	"data_col_names=",
+	"graph_title=",
+	"legend_spec="
 ]
 
 script_3D_onedf_opts = \
@@ -82,7 +104,9 @@ script_3D_onedf_opts = \
 	"yaxis_range=",
 	"zaxis_range=",
 	"data_col_numbers=",
-	"data_col_names="
+	"data_col_names=",
+	"graph_title=",
+	"legend_spec="
 ]
 
 script_3D_multidf_opts = \
@@ -98,7 +122,9 @@ script_3D_multidf_opts = \
 	"yaxis_range=",
 	"zaxis_range=",
 	"data_col_numbers=",
-	"data_col_names="
+	"data_col_names=",
+	"graph_title=",
+	"legend_spec="
 ]
 
 

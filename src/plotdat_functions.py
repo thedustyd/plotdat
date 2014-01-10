@@ -2,8 +2,17 @@
 #
 # functions for plotdat.py program
 #
-# Author:       Louis Fry
-# Date:         08/11/2013
+# Copyright (C) {2013-2014}  {Louis Fry}
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
 
 import getopt				# argument parsing
@@ -26,8 +35,10 @@ gen_filemode_spec = ''
 gnuplot_options = ''
 header_delim = ''
 header_length = ''
+legend_spec = ''
 line_style = ''
 output_file_name = ''
+graph_title = ''
 number_format = ''
 sel_col_numbers = ''
 sel_col_names = ''
@@ -62,8 +73,10 @@ def parse_opts(cmd_args):
 	global gnuplot_options
 	global header_delim
 	global header_length
+	global legend_spec
 	global line_style
 	global output_file_name
+	global graph_title
 	global number_format
 	global xaxis_range
 	global yaxis_range
@@ -126,17 +139,13 @@ def parse_opts(cmd_args):
 	except KeyError:
 		number_format = "\\\\"
 	
-	# -l
-	try:
-		x = ret["-l"]
-		line_style = x
-	except KeyError:
-		line_style = "with lines"
-	
 	# -m
 	try:
 		x = ret["-m"]
 		sel_col_numbers = x
+		if x == "":
+			print "ERROR: parse_opts: -m option is empty."
+			return (None,None)
 	except KeyError:
 		print "ERROR: parse_opts: -m option is required."
 		return (None,None)
@@ -145,6 +154,9 @@ def parse_opts(cmd_args):
 	try:
 		x = ret["-M"]
 		sel_col_names = x
+		if x == "":
+			print "ERROR: parse_opts: -M option is empty."
+			return (None,None)			
 	except KeyError:
 		print "ERROR: parse_opts: -M option is required."
 		return (None,None)
@@ -156,12 +168,26 @@ def parse_opts(cmd_args):
 	except KeyError:
 		output_file_name = ''
 	
+	# -l
+	try:
+		x = ret["-l"]
+		legend_spec = x
+	except KeyError:
+		legend_spec = "with lines"
+	
 	# -s
 	try:
 		x = ret["-s"]
 		data_file_sep = x
 	except KeyError:
 		data_file_sep = '\t'
+	
+	# -t
+	try:
+		x = ret["-t"]
+		graph_title = x
+	except KeyError:
+		pass
 	
 	# -v
 	try:
@@ -356,35 +382,38 @@ def get_gnuplot_variables():
 	gnuplot_variables.append(yaxis_range)
 	if _3D_mode == True:
 		gnuplot_variables.append(zaxis_range)
-
-	# Get line style
-	
 	
 	# Get column specs and column names
 	gnuplot_variables.append(sel_col_numbers)
 	gnuplot_variables.append(sel_col_names)
+	
+	# Get graph title
+	gnuplot_variables.append(graph_title)
+	
+	# Get legend spec
+	gnuplot_variables.append(legend_spec)
 	
 	return gnuplot_variables
 
 # Create gnuplot command
 def gnuplot_command(gnuplot_variables,file_list,gen_list):
 	gnuplot_command = ""
+	gnuplot_script_vars = ""
 	file_gen,dir_gen = gen_list
+	
+	# Create common variables string
+	var = [x+'\'%s\';' % (gnuplot_variables[pds.script_onedf_opts.index(x)]) for x in pds.script_onedf_opts]
 	
 	# Handle operation modes
 	if catenate == False and _3D_mode == False:
 		ret = -1
-		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_onedf_opts.index(x)]) for x in pds.script_onedf_opts]
-		gnuplot_script_vars = ""
 		outfilename = ""
 		
 		# Call gnuplot for every data file
 		for i in range(len(file_list)):
-			# Check if using file gen
-			if len(file_gen) == 0:
-				outfilename = file_list[i].split('.')[0].split('/')[-1]
-			elif len(file_gen) == len(file_list) and file_gen[i] == []:
-				outfilename = file_list[i].split('.')[0].split('/')[-1]
+			# Check if using file gen. if not use file name without extension
+			if len(file_gen) == 0 or (len(file_gen) == len(file_list) and file_gen[i] == []):
+				outfilename = file_list[i].split('/')[-1].split('.')[0]
 			elif len(file_gen) == len(file_list) and file_gen[i] != []:
 				outfilename = "_".join(file_gen[i])
 			
@@ -392,29 +421,28 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 			if len(dir_gen) == len(file_list) and dir_gen[i] != []:
 				outfilename = outfilename + '_' + "_".join(dir_gen[i])
 			
-			# Generate command string with all arguments
+			# Generate command string with all arguments. override previous definition of output_file_name
 			gnuplot_script_vars = "-e \"%s;data_file_name='%s';output_file_name='%s';\"" % ("".join(var),file_list[i],outfilename)
 			gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_onedf)
 			
 			# Call gnuplot
-			ret = sp.call(gnuplot_command,shell=True)
+			ret = sp.call(gnuplot_command,shell=True) # trusted input?? likely not, may need more sanitizing
 			if ret != 0:
 				print "ERROR: gnuplot: Bad exit status %i." % ret
 				return ret
 		return ret
 	
 	elif catenate == True and _3D_mode == False:
-		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_multidf_opts.index(x)]) for x in pds.script_multidf_opts]
-		gnuplot_script_vars = "-e \"%s\"" % ("".join(var))
+		file_gen_list = ["_".join(x) for x in file_gen]
+		gnuplot_script_vars = "-e \"%s;file_list='%s';file_gen_list='%s'\"" % ("".join(var)," ".join(file_list)," ".join(file_gen_list))
 		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_multidf)
 		
-		ret = sp.call(gnuplot_command,shell=True)
+		ret = sp.call(gnuplot_command,shell=True) # trusted input?? likely not, may need more sanitizing
 		if ret != 0:
 			print "ERROR: gnuplot: Bad exit status %i." % ret
 		return ret
 		
 	elif catenate == False and _3D_mode == True:
-		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_3D_onedf_opts.index(x)]) for x in pds.script_3D_onedf_opts]
 		gnuplot_script_vars = "-e \"%s\"" % ("".join(var))
 		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_3D_onedf)
 		
