@@ -1,0 +1,128 @@
+.\" groff -man -Tascii plotdat.1
+.TH PLOTDAT 1 "JANUARY 2014" Linux "User Manuals"
+.SH NAME
+plotdat \- plot graphs from many data files.
+.SH SYNOPSIS
+.B plotdat -a
+.I axis-names
+.B [-cDhvV] [-f
+.I axis-format
+.B ] [-m
+.I col-numbers
+.B ] [-M
+.I col-names
+.B ] [-o
+.I word
+.B ] [-l
+.I legend-spec
+.B ] [-s
+.I data-sep
+.B ] [-t
+.I title
+.B ] [-x -y -z
+.I range
+.B ] [--3D-mode] [--catenate] [--dirmode-gen
+.I pattern
+.B ] [--dirmode-gen-delim
+.I dir-sep
+.B ] [--filemode-gen
+.I pattern
+.B ] [--filemode-gen-delim
+.I file-sep
+.B ] [--gnuplot-options
+.I options
+.B ] [--header-parser
+.I options
+.B ] [--viewer-position
+.I position-spec
+.B ]
+.I data files
+.B ...
+.SH DESCRIPTION
+.B plotdat
+takes the arguments and data files provided to create single graphs for each data file by default, or a single graph representing all data files. Further capabilities such as 3D are to be implemented. It invokes 'gnuplot' with a set of generated arguments and variables created from the options passed to 'plotdat'. There are 'gnuplot' command source files for each operational mode which contain a predefined sequence of commands. These files can be easily edited to adapt the output to one's needs.
+.SH SHORT OPTIONS
+.IP -a
+Axis names, first three strings delimited by '\\' characters.
+.IP -c
+Create single image from data files (catenate).
+.IP -D
+Debug output.
+.IP "-f axis-format"
+Axis number format. Uses
+.B gnuplot(1)
+syntax.
+.IP -h
+Help output.
+.IP "-m col-numbers"
+Specify data columns to plot from data file.
+.IP "-M col-names"
+Specify the names of data columns specified with '-m'.
+.SH LONG OPTIONS
+.IP --3D-mode
+Run gnuplot in 3D plotting mode.
+.IP --catenate
+Create single image from data files.
+.IP "--dirmode-gen pattern"
+Select directory names using numbers delimited by spaces.
+.IP "--dirmode-gen-delim dir-sep"
+Use
+.I dir-sep
+character to split directory path names. Default is '/'.
+.IP "--filemode-gen pattern"
+Select filename pieces using numbers delimited by spaces.
+.IP "--filemode-gen-delim file-sep"
+Use
+.I file-sep
+character to split filenames into a set of strings. Default is '_'.
+.IP "--gnuplot-options options"
+Pass options to gnuplot invocations.
+.IP "--header-parser options"
+Pass options to header parser invocations.
+.IP "--viewer-position position-spec"
+Viewer position specified in
+.B gnuplot(1)
+syntax.
+.SH EXAMPLES
+.IP "Plotting graphs for each data file provided using different columns:"
+plotdat -a "Voltage (V)\\Current (A)" -m "3" -M "I_AB" *.dat
+.br
+plotdat -a "Voltage (V)\\Current (A)" -m "2 3" -M "I_CD\\I_AB" *.dat
+.IP "Plotting a single graph for each data file provided with labels:"
+plotdat -ca "x axis\\y axis" -m "2 4" -M "sinx\\cosx" *.dat
+.IP "Using the filemode-gen options:"
+plotdat -a "Voltage (V)\\Current (A)" -m "2 3" -M "I_CD\\I_AB" *.dat --filemode-gen "2 3"
+
+If the files *.dat have the following format:
+
+experiment_1A_T=50K.dat
+.br 
+experiment_1B_T=50K.dat
+.br
+experiment_2A_T=100K.dat
+.br
+experiment_2B_T=100K.dat
+
+The curve labels in the legend will have "1A_T=50K", "1B_T=50K" and so on, in their names. With the labels being generated as "I_CD_1A_T=50K", "I_AB_1A_T=50K", "I_CD_1B_T=50K", "I_AB_1B_T=50K" and so on, allowing the curves to be identified.
+	
+.SH FILES
+.I onedf.plt
+.RS
+gnuplot command code for creating single 2D graphs for each data file provided.
+.RE
+.I multidf.plt
+.RS
+gnuplot command code for creating one 2D graph from all data files provided.
+.SH ENVIRONMENT
+.IP PLOTDAT_PLTSRC
+Used by plotdat to find the gnuplot command files for creating the graphs.
+.SH DIAGNOSTICS
+The easiest way to get familiar with plotdat is to run it without any arguments and see what it requires to produce output.
+.SH BUGS
+Depends on how the program is used.
+.br
+Column names can only be delimited by characters, this could perhaps be solved.
+.SH AUTHOR
+Louis Fry <lfry513 at googlemail dot com>
+.SH "SEE ALSO"
+.BR plotdat_hp (1)
