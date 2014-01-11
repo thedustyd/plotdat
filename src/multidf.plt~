@@ -24,7 +24,7 @@ if (legend_spec ne '') set key @legend_spec
 # Argument strings
 fgl_string = ""
 arg_string = ""
-arg_prototype = "for [i=1:words(\"%s\")] \"%s\" every ::int(\"%s\") using 1:int(word(\"%s\",i)) with lines title word(\"%s\",i).\"%s\".\" \".\"%s\""
+arg_prototype = "for [i=1:words(\"%s\")] \"%s\" every ::int(\"%s\") using 1:int(word(\"%s\",i)) title word(\"%s\",i).\"%s\".\" \".\"%s\""
 
 # Create gnuplot arguments
 do for [j=1:words(file_list)] {

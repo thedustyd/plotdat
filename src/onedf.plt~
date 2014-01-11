@@ -22,7 +22,7 @@ unset key
 if (legend_spec ne '') set key @legend_spec
 
 # Plot the provided data file with options provided
-plot for [i=1:words(data_col_numbers)] data_file_name every ::int(header_length) using 1:int(word(data_col_numbers,i)) with lines title word(data_col_names,i)." ".parser_data
+plot for [i=1:words(data_col_numbers)] data_file_name ::int(header_length) using 1:int(word(data_col_numbers,i)) with lines title word(data_col_names,i)." ".parser_data
 
 
 

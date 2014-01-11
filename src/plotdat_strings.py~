@@ -73,7 +73,9 @@ script_onedf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"header_length=",
+	"header_data="
 ]
 
 script_multidf_opts = \
@@ -88,7 +90,9 @@ script_multidf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"header_length=",
+	"header_data="
 ]
 
 script_3D_onedf_opts = \
@@ -106,7 +110,9 @@ script_3D_onedf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"header_length=",
+	"header_data="
 ]
 
 script_3D_multidf_opts = \
@@ -124,7 +130,9 @@ script_3D_multidf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"header_length=",
+	"header_data="
 ]
 
 

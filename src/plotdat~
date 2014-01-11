@@ -90,7 +90,7 @@ file_gen = []
 
 # Parse options
 optdict,args = pdf.parse_opts(sys.argv[1:])
-if optdict == None or args == None:
+if optdict == None:
 	sys.exit(-1)
 
 pdf.vprint("%i Files to Process.\n%i Options Passed." % (len(args),len(optdict)))
