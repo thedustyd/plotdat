@@ -119,7 +119,7 @@ print header_length
 # Print the tag matches found
 for tm in tag_matches:
 	t,v = tm[0]
-	print "%s=%s" % (t.strip(":\t "),"".join(v.strip("\t").split(" ")))
+	print "%s=%s" % ("".join(t.strip(":\t").split(" ")),"".join(v.strip("\t").split(" ")))
 
 #p = re.compile(tag_regex % tags_list[0])
 #res = p.findall(header_string)

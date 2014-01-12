@@ -479,7 +479,7 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 			parser_outlist.append(parser_output)
 		
 		header_lengths = " ".join([x[0] for x in parser_outlist])
-		header_info = " ".join(["".join(x[1:]) for x in parser_outlist])
+		header_info = " ".join(["_".join(x[1:]) for x in parser_outlist])
 		
 		gnuplot_script_vars = "-e \"%s;file_list='%s';file_gen_list='%s';header_lengths='%s';parser_data='%s';\"" % ("".join(var)," ".join(file_list)," ".join(file_gen_list),header_lengths,header_info)
 		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_multidf)

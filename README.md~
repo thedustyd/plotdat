@@ -43,8 +43,7 @@ bilities are implemented:
 		
 	- Header information parsing for annotations and labels.
 		
-		Consistency problems: Only works with compact strings, all spaces are removed so phrases come out
-		gibberish.
+		Consistency problems: Difficult to extract meaningful information from varying headers.
 
 It is possible to cover many permutations of how the files are formated by using Unix tools to catenate
 data files or rearrange columns to get the desired graph output. Regular expressions are very powerful

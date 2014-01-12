@@ -109,6 +109,7 @@ for tag in tags_list:
 		continue
 	tag_matches.append(res)
 
+# Check for errors
 if tag_matches == []:
 	print "No matches to specified tags."
 	sys.exit(-1)

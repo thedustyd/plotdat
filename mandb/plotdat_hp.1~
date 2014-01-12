@@ -1,0 +1,65 @@
+.\" groff -man -Tascii plotdat_hp.1
+.TH PLOTDAT_HP 1 "JANUARY 2014" Linux "User Manuals"
+.SH NAME
+plotdat_hp \- extract data file header information for use with
+.B plotdat(1)
+.SH SYNOPSIS
+.B plotdat_hp -t
+.I tag-list
+.B [-r
+.I reg-expr
+.B ] [-R
+.I reg-expr
+.B ] 
+.I data-files
+.B ...
+.SH DESCRIPTION
+.B plotdat_hp
+searches through the provided data file and extracts the required information from it's header if it exists and prints it to
+.I stdout.
+If there are no errors, the output should always be more than one line long.
+.B plotdat_hp
+will first print the number of header lines found, then it will print the tags matched with the
+.B -t
+option. The header information is searched using regular expressions, and can be overriden to suit a particular data format. The default form of the regular expression uses a ':' character to distinguish tags from their values. When matching a particular tag, the string used as a regular expression is "(%s)\\:(.*)" where the tag name is substituted into %s. When trying to gather common information from header lines over multiple files, the regular expression "(.*)\\:(.*)" is used to find any tag with it's associated value. When the tags are found, they are reformatted to contain no spaces to prevent errors when they are passed to the gnuplot scripts (see
+.B plotdat(1)
+for details). If errors and exceptions are encountered, the desired behaviour is that a single line containing the error should be printed, which is interpreted as a failure to find the desired tags in 'plotdat'.
+.SH SHORT OPTIONS
+.IP "-t tag-list"
+Tag list to find values for, delimited by '\\' characters.
+.IP "-r reg-expr"
+Override the regular expression that matches tags provided with the
+.B -t
+option.
+.IP "-R reg-expr"
+Override the regular expression that finds arbitrary tags.
+.SH EXAMPLES
+.IP "Default usage:"
+$ plotdat_hp -t "V1\V2\V3" file.dat
+.br
+V1=1V
+.br
+V2=032V
+.br
+V3=2.2V
+.br
+$
+.IP "Overriding regular expressions:"
+$ plotdat_hp -t "V1\V2\V3" -r "(%s)\\=(.*)" file.dat
+.br
+V1=1V
+.br
+V2=032V
+.br
+V3=2.2V
+.br
+$
+.SH ENVIRONMENT
+.SH DIAGNOSTICS
+.SH BUGS
+.SH LICENSE
+This software is licensed under the terms of the GPLv2 license, see the LICENSE.md file that came with the current package.
+.SH AUTHOR
+Louis Fry <lfry513 at googlemail dot com>
+.SH "SEE ALSO"
+.BR plotdat (1)

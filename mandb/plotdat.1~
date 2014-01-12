@@ -139,7 +139,7 @@ Depends on how the program is used.
 .br
 Column names can only be delimited by characters, this could perhaps be solved.
 .SH LICENSE
-This software is licensed under the terms of the GPLv2 license, see the LICENSE.md file that came with the current package.
+This software is licensed under GPLv2, see the LICENSE.md file that came with the current package.
 .SH AUTHOR
 Louis Fry <lfry513 at googlemail dot com>
 .SH "SEE ALSO"
