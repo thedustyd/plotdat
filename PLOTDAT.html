@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"
+ [<!ENTITY mathml "http://www.w3.org/1998/Math/MathML">]>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="generator" content="groff -Txhtml, see www.gnu.org"/>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
+<meta name="Content-Style" content="text/css"/>
+<style type="text/css">
+       .center { text-align: center }
+       .right  { text-align: right }
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sun Jan 12 18:21:24 2014 -->
+<title>PLOTDAT</title>
+
+</head>
+<body>
+
+<h1>PLOTDAT</h1>
+
+<p><a href="#heading1">NAME</a><br/>
+<a href="#heading2">SYNOPSIS</a><br/>
+<a href="#heading3">DESCRIPTION</a><br/>
+<a href="#heading4">SHORT OPTIONS</a><br/>
+<a href="#heading5">LONG OPTIONS</a><br/>
+<a href="#heading6">EXAMPLES</a><br/>
+<a href="#heading7">FILES</a><br/>
+<a href="#heading8">ENVIRONMENT</a><br/>
+<a href="#heading9">DIAGNOSTICS</a><br/>
+<a href="#heading10">BUGS</a><br/>
+<a href="#heading11">LICENSE</a><br/>
+<a href="#heading12">AUTHOR</a><br/>
+<a href="#heading13">SEE ALSO</a><br/>
+
+</p>
+<hr/>
+
+
+<h2 id="heading1">NAME
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">plotdat &minus;
+plot graphs from many data files</p>
+
+<h2 id="heading2">SYNOPSIS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>plotdat
+-a</b> <i>axis-names</i> <b>[-cDhvV] [-f</b>
+<i>axis-format</i> <b>] [-m</b> <i>col-numbers</i> <b>]
+[-M</b> <i>col-names</i> <b>] [-o</b> <i>word</i> <b>]
+[-l</b> <i>legend-spec</i> <b>] [-s</b> <i>data-sep</i> <b>]
+[-t</b> <i>title</i> <b>] [-x -y -z</b> <i>range</i> <b>]
+[--3D-mode] [--catenate] [--dirmode-gen</b> <i>pattern</i>
+<b>] [--dirmode-gen-delim</b> <i>dir-sep</i> <b>]
+[--filemode-gen</b> <i>pattern</i> <b>]
+[--filemode-gen-delim</b> <i>file-sep</i> <b>]
+[--gnuplot-options</b> <i>options</i> <b>]
+[--header-parser</b> <i>options</i> <b>]
+[--viewer-position</b> <i>position-spec</i> <b>]</b> <i>data
+files</i> <b>...</b></p>
+
+<h2 id="heading3">DESCRIPTION
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>plotdat</b>
+takes the arguments and data files provided to create single
+graphs for each data file by default, or a single graph
+representing all data files. Further capabilities such as 3D
+are to be implemented. It invokes &rsquo;gnuplot&rsquo; with
+a set of generated arguments and variables created from the
+options passed to &rsquo;plotdat&rsquo;. There are
+&rsquo;gnuplot&rsquo; command source files for each
+operational mode which contain a predefined sequence of
+commands. These files can be easily edited to adapt the
+output to one&rsquo;s needs.</p>
+
+<h2 id="heading4">SHORT OPTIONS
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="8%" class="center"></col>
+<col width="78%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">-a</p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">Axis names, first three strings
+delimited by &rsquo;\&rsquo; characters.</p></td></tr>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p>-c</p></td>
+<td></td>
+<td>
+
+
+<p>Create single image from data files (catenate).</p></td></tr>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p>-D</p></td>
+<td></td>
+<td>
+
+
+<p>Debug output.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;">-f axis-format</p>
+
+<p style="margin-left:22%;">Axis number format. Uses
+<b>gnuplot(1)</b> syntax.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="8%" class="center"></col>
+<col width="18%"></col>
+<col width="60%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p>-h</p></td>
+<td></td>
+<td>
+
+
+<p>Help output.</p></td>
+<td>
+</td></tr>
+</table>
+
+<p style="margin-left:11%;">-m col-numbers</p>
+
+<p style="margin-left:22%;">Specify data columns to plot
+from data file.</p>
+
+<p style="margin-left:11%;">-M col-names</p>
+
+<p style="margin-left:22%;">Specify the names of data
+columns specified with &rsquo;-m&rsquo;.</p>
+
+<h2 id="heading5">LONG OPTIONS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">--3D-mode</p>
+
+<p style="margin-left:22%;">Run gnuplot in 3D plotting
+mode.</p>
+
+<p style="margin-left:11%;">--catenate</p>
+
+<p style="margin-left:22%;">Create single image from data
+files.</p>
+
+<p style="margin-left:11%;">--dirmode-gen pattern</p>
+
+<p style="margin-left:22%;">Select directory names using
+numbers delimited by spaces.</p>
+
+<p style="margin-left:11%;">--dirmode-gen-delim dir-sep</p>
+
+<p style="margin-left:22%;">Use <i>dir-sep</i> character to
+split directory path names. Default is &rsquo;/&rsquo;.</p>
+
+<p style="margin-left:11%;">--filemode-gen pattern</p>
+
+<p style="margin-left:22%;">Select filename pieces using
+numbers delimited by spaces.</p>
+
+<p style="margin-left:11%;">--filemode-gen-delim
+file-sep</p>
+
+<p style="margin-left:22%;">Use <i>file-sep</i> character
+to split filenames into a set of strings. Default is
+&rsquo;_&rsquo;.</p>
+
+<p style="margin-left:11%;">--gnuplot-options options</p>
+
+<p style="margin-left:22%;">Pass options to gnuplot
+invocations.</p>
+
+<p style="margin-left:11%;">--header-parser options</p>
+
+<p style="margin-left:22%;">Pass options to header parser
+invocations. See <b>plotdat_hp(1)</b> for a description.</p>
+
+<p style="margin-left:11%;">--viewer-position
+position-spec</p>
+
+<p style="margin-left:22%;">Viewer position specified in
+<b>gnuplot(1)</b> syntax.</p>
+
+<h2 id="heading6">EXAMPLES
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Plotting graphs
+for each data file provided using different columns:</p>
+
+<p style="margin-left:22%;">plotdat -a &quot;Voltage
+(V)\Current (A)&quot; -m &quot;3&quot; -M &quot;I_AB&quot;
+*.dat <br/>
+plotdat -a &quot;Voltage (V)\Current (A)&quot; -m &quot;2
+3&quot; -M &quot;I_CD I_AB&quot; *.dat</p>
+
+<p style="margin-left:11%;">Plotting a single graph for
+each data file provided with labels:</p>
+
+<p style="margin-left:22%;">plotdat -ca &quot;x axis\y
+axis&quot; -m &quot;2 4&quot; -M &quot;sinx cosx&quot;
+*.dat</p>
+
+<p style="margin-left:11%;">Using the filemode-gen
+options:</p>
+
+<p style="margin-left:22%;">plotdat -a &quot;Voltage
+(V)\Current (A)&quot; -m &quot;2 3&quot; -M &quot;I_CD
+I_AB&quot; *.dat --filemode-gen &quot;2 3&quot;</p>
+
+<p style="margin-left:22%; margin-top: 1em">If the file
+names *.dat have the following format:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">experiment_1A_T=50K.dat
+<br/>
+experiment_1B_T=50K.dat <br/>
+experiment_2A_T=100K.dat <br/>
+experiment_2B_T=100K.dat</p>
+
+<p style="margin-left:22%; margin-top: 1em">The curve
+labels in the legend will have &quot;1A_T=50K&quot;,
+&quot;1B_T=50K&quot; and so on, in their names. With the
+labels being generated as &quot;I_CD_1A_T=50K&quot;,
+&quot;I_AB_1A_T=50K&quot;, &quot;I_CD_1B_T=50K&quot;,
+&quot;I_AB_1B_T=50K&quot; and so on, allowing the curves to
+be identified.</p>
+
+<p style="margin-left:11%;">Using the header parser:</p>
+
+<p style="margin-left:22%;">plotdat -a &quot;Voltage
+(V)\Current (A)&quot; -m &quot;2 3&quot; -M &quot;I_CD
+I_AB&quot; *.dat --header-parser &quot;-t,Vout&quot;</p>
+
+<p style="margin-left:22%; margin-top: 1em">If the headers
+contain entries like &quot;Vout: 10.0 mV&quot;, the parser
+will by default print the number of header lines for each
+file and a line &quot;Vout=10.0mV&quot; where all spaces are
+stripped. See <b>plotdat_hp(1)</b> for details about the
+regular expressions and how they are overriden. Since the
+filemode-gen option was not passed, the curve labels will
+not be named using the file name, only the output from the
+parser, which in this case could be &quot;Vout=1mV&quot;,
+&quot;Vout=2mV&quot;, &quot;Vout=3mV&quot; and so on.</p>
+
+<p style="margin-left:11%;">Using many features:</p>
+
+<p style="margin-left:22%;">plotdat -ca &quot;Voltage
+(V)\Current (A)&quot; -m &quot;2 3&quot; -M &quot;I_CD
+I_AB&quot; *.dat --header-parser &quot;-t,Vout1\Vout2&quot;
+--filemode-gen &quot;2 3&quot;</p>
+
+<p style="margin-left:22%; margin-top: 1em">With the
+information from the two previous examples, this command
+will create a single graph, with all curves having names
+&quot;I_CD_1A_T=50K Vout1=1mV_Vout2=54nV&quot;,
+&quot;I_AB_1A_T=50K Vout1=1mV_Vout2=54nV&quot;,
+&quot;I_CD_1B_T=50K_Vout1=2mV Vout2=72nV&quot; and so
+on.</p>
+
+<p style="margin-left:22%; margin-top: 1em">Whereas without
+the <b>-c</b> option a graph for each data file will be
+created, and the names would be &quot;I_CD_1A_T=50K
+Vout1=1mV Vout2=54nV&quot;, &quot;I_AB_1A_T=50K Vout1=1mV
+Vout2=54nV&quot; in one file, then &quot;I_CD_1B_T=50K
+Vout1=2mV Vout2=72nV&quot; and so on.</p>
+
+<h2 id="heading7">FILES
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>onedf.plt</i></p>
+
+<p style="margin-left:22%;">gnuplot command code for
+creating single 2D graphs for each data file provided.</p>
+
+<p style="margin-left:11%;"><i>multidf.plt</i></p>
+
+<p style="margin-left:22%;">gnuplot command code for
+creating one 2D graph from all data files provided.</p>
+
+<h2 id="heading8">ENVIRONMENT
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">PLOTDAT_PLTSRC</p>
+
+<p style="margin-left:22%;">Used by plotdat to find the
+gnuplot command files for creating the graphs.</p>
+
+<h2 id="heading9">DIAGNOSTICS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The easiest way
+to get familiar with plotdat is to run it without any
+arguments and see what it requires to produce output.</p>
+
+<h2 id="heading10">BUGS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Depends on how
+the program is used. <br/>
+Column names can only be delimited by characters, this could
+perhaps be solved.</p>
+
+<h2 id="heading11">LICENSE
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This software
+is licensed under the terms of the GPLv2 license, see the
+LICENSE.md file that came with the current package.</p>
+
+<h2 id="heading12">AUTHOR
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Louis Fry
+&lt;lfry513 at googlemail dot com&gt;</p>
+
+<h2 id="heading13">SEE ALSO
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>plotdat_hp</b>(1)</p>
+<hr/>
+</body>
+</html>

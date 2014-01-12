@@ -36,10 +36,14 @@ plotdat_desc = \
 short_options = \
 'a:cDf:hl:m:M:o:s:t:vVx:y:z:'
 
+hp_short_options = \
+'ct:r:R:'
+
 # Long options
 long_options = \
 [
 	'3D-mode',
+	'annotate=',
 	'axis-names-delim=',
 	'catenate',
 	'dirmode-gen-delim=',
@@ -73,7 +77,8 @@ script_onedf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"annotate="
 ]
 
 script_multidf_opts = \
@@ -88,7 +93,8 @@ script_multidf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"annotate="
 ]
 
 script_3D_onedf_opts = \
@@ -106,7 +112,8 @@ script_3D_onedf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"annotate="
 ]
 
 script_3D_multidf_opts = \
@@ -124,7 +131,8 @@ script_3D_multidf_opts = \
 	"data_col_numbers=",
 	"data_col_names=",
 	"graph_title=",
-	"legend_spec="
+	"legend_spec=",
+	"annotate="
 ]
 
 

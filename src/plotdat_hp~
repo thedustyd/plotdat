@@ -2,6 +2,7 @@
 #
 #	All options:
 #
+#	-c					: Get common tag values
 #	-t [tags]			: Get value of tags provided
 #	-r [regex]			: python re package regular expression string to match tags
 #	-R [regex]			: python re package regular expression string to match single tag (override)
@@ -23,116 +24,91 @@ import sys
 import getopt
 import re
 
-optlist = []						# Options and arguments returned by getopt
+import plotdat_functions as pdf
+import plotdat_strings as pds
+
+optlist = {}						# Options and arguments returned by hp_parse_opts
 args = []
+fd = None							# file descriptor
+header_length = []
+header_string = []
 
-tags_list = []						# list of tags
-tags_regex = "(.*)\:(.*)"			# regular expression for matching tags and their values
-tag_regex = "(%s)\:(.*)"
-header_delimit_line = "\n"			# line that delimits the header from the data
-
-fd = None			# file descriptor
-
-# Get options and file name(s)
-try:
-	optlist, args = getopt.gnu_getopt(sys.argv[1:],"t:r:R:")
-except getopt.GetoptError as e:
-	print "ERROR: getopt: '%s'." % (e.msg)
+# Parse options
+optdict,args = pdf.hp_parse_opts(sys.argv[1:])
+if optdict == None or args == None:
 	sys.exit(-1)
 
-if len(args) == 0:
-	print "ERROR: plotdat_hp: No files passed."
-	sys.exit(-1)
-
-# Reformat option list
-optdict = {}
-for opt,arg in optlist:
-	optdict[opt] = arg
-
-# Handle options
-try:
-	x = optdict["-t"]
-	tags_list = x.split('\\')
-except KeyError as e:
-	print "ERROR: plotdat_hp: -t option is required."
-	sys.exit(-1)
-
-try:
-	x = optdict["-r"]
-	tag_regex = x
-except KeyError as e:
-	pass
+# Handle common mode
+if not pdf.get_common:
+	header_length,header_string = pdf.header_data(args[0])
+	if header_length == None or header_string == None:
+		sys.exit(-1)
 	
-try:
-	x = optdict["-R"]
-	tags_regex = x
-except KeyError as e:
-	pass
+	# Get requested tab values
+	tag_matches = pdf.header_tag(header_string)
 
-# Open specified file
-try:
-	fd = open(args[0],'r')
-except IOError:
-	print "ERROR: Invalid data file name '%s'." % args[0]
-	sys.exit(-1)
-
-# Get file length and header length
-found_delim = False
-header_lines = []
-header_length = 0
-lines_read = 0
-for line in fd:
-	if line == header_delimit_line:
-		found_delim = True
-	if not found_delim:
-		header_lines.append(line)
-		header_length += 1
-	lines_read += 1
-header_string = "".join(header_lines)
-
-# Close file
-fd.close()
-
-# Analyse header lines
-if lines_read - header_length == 0:
-	print "No header in data file '%s'." % args[0]
-	sys.exit(-1)
-elif lines_read - header_length == 1:
-	print "Header delimiting line found at top of file '%s'." % args[0]
-	sys.exit(-1)
-
-# Get requested tab values
-tag_matches = []
-for tag in tags_list:
-	res = re.findall(tag_regex % tag,header_string)
-	if res == []:
-		continue
-	tag_matches.append(res)
-
-if tag_matches == []:
-	print "No matches to specified tags."
-	sys.exit(-1)
-
-# Print the number of header lines
-print header_length
-
-# Print the tag matches found
-for tm in tag_matches:
-	t,v = tm[0]
-	print "%s=%s" % ("".join(t.strip(":\t").split(" ")),"".join(v.strip("\t").split(" ")))
-
-#p = re.compile(tag_regex % tags_list[0])
-#res = p.findall(header_string)
-#print repr(tag_matches)
-
-# Get strings enclosed between '\n' and ':' character
-p = re.compile(tags_regex)
-res = p.findall(header_string)
-
-# info
-#header_string = header_string.strip('\n')
-#print "Header length: %i." % header_length
-#print "Header lines: \n %s" % (repr(res))
-
-
+	# Check for matches
+	if tag_matches == []:
+		print "No matches to specified tags."
+		sys.exit(-1)
+	
+	# Print the number of header lines
+	print header_length
+	
+	# Print the tag matches found
+	for tm in tag_matches:
+		t,v = tm[0]
+		print "%s=%s" % ("".join(t.strip(":\t").split(" ")),"".join(v.strip("\t").split(" ")))
+	sys.exit(0)
+else:
+	all_tags = []
+	com_tags = []
+	
+	# Go through all passed files
+	for f in args:
+		
+		# Get header string
+		header_length, header_string = pdf.header_data(f)
+		if header_length == None or header_string == None:
+			sys.exit(-1)
+		
+		# Get all tags
+		if pdf.auto:
+			all_tags.append(re.findall(pdf.tags_regex,header_string))
+		else:
+			all_tags.append(pdf.header_tag(header_string)[0])
+	print all_tags
+	
+	# Find keys common to all files and check their values
+	tresults = {}
+	vresults = {}
+	for tagl in all_tags[1:]:
+		for tpl in tagl:			# compare all found tags from each header
+									# with the tags from the the first header
+			try:
+				t0,v0 = all_tags[0][tagl.index(tpl)] # first header, tag N
+			except IndexError:				# ignore unique tags
+				continue
+			t,v = tpl
+			if t == t0:
+				try:
+					tresults[t0] += 1
+				except KeyError:
+					tresults[t0] = 2 # account for reference header
+			if v == v0:
+				try:
+					vresults[t0] += 1
+				except KeyError:
+					vresults[t0] = 2 # account for reference header
+	
+	# Find key that the same value in each file
+	final = [k for k,v in vresults.items() if v == len(args)]
+	if final == []:	# silent error
+		sys.exit(-1)
+	
+	# Print the common values
+	for tlist in all_tags[0]:
+		t0, v0 = tlist
+		if t0 in final:
+			print "%s=%s" % (t0,v0)
 

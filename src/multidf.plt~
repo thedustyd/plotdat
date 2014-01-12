@@ -21,10 +21,23 @@ if (graph_title ne '') set title graph_title
 unset key
 if (legend_spec ne '') set key @legend_spec
 
+# Set annotation
+if (annotate eq 'True') {
+	if (common_info1 ne '') {
+		set label 1 common_info1 at graph 0.02, 0.11 tc lt -1
+	}
+	if (common_info2 ne '') {
+		set label 2 common_info2 at graph 0.02, 0.08 tc lt -1
+	}
+	if (common_info3 ne '') {
+		set label 3 common_info3 at graph 0.02, 0.05 tc lt -1
+	}
+}
+print common_info1
 # Argument strings
 fgl_string = ""
 arg_string = ""
-arg_prototype = "for [i=1:words(\"%s\")] \"%s\" every ::int(\"%s\") using 1:int(word(\"%s\",i)) title word(\"%s\",i).\"%s\".\" \".\"%s\""
+arg_prototype = "for [i=1:words(\"%s\")] \"%s\" every ::int(\"%s\") using 1:int(word(\"%s\",i)) with lines title word(\"%s\",i).\"%s\".\" \".\"%s\""
 
 # Create gnuplot arguments
 do for [j=1:words(file_list)] {

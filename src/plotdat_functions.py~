@@ -17,15 +17,23 @@
 
 import getopt				# argument parsing
 import subprocess as sp		# command line access
+import re					# regular expressions
 import sys
 import plotdat_strings as pds
 
+#
+#------------------------------------------------------------------------------------------
+#							Plotdat Functions and Global Variables
+#------------------------------------------------------------------------------------------
+#
+
 verbose = False
 debug = False
-
 _3D_mode = False
 axis_names = ''
 axis_names_delim = ''
+annotate = False
+annotate_sel = ''
 catenate = False
 data_file_sep = ''
 gen_dirmode_delim = ''
@@ -47,6 +55,7 @@ xaxis_range = ''
 yaxis_range = ''
 zaxis_range = ''
 
+# Printing
 def vprint(message):
 	if verbose == True or debug == True:
 		print message
@@ -63,6 +72,8 @@ def parse_opts(cmd_args):
 	global _3D_mode
 	global axis_names
 	global axis_names_delim
+	global annotate
+	global annotate_sel
 	global catenate
 	global data_file_sep
 	global sel_col_numbers
@@ -83,6 +94,8 @@ def parse_opts(cmd_args):
 	global xaxis_range
 	global yaxis_range
 	global zaxis_range
+	optlist = []
+	args = []
 	
 	# Get options and file names
 	try:
@@ -98,8 +111,8 @@ def parse_opts(cmd_args):
 	
 	for f in args:
 		try:
-			f = open(f,"r")
-			f.close()
+			fd = open(f,"r")
+			fd.close()
 		except IOError as e:
 			errno,msg = e
 			print "ERROR: open: '[%i] %s'." % (errno,msg)
@@ -235,6 +248,13 @@ def parse_opts(cmd_args):
 		_3D_mode = False
 	
 	try:
+		x = ret["--annotate"]
+		annotate = True
+		annotate_sel = x
+	except KeyError:
+		annotate = False
+	
+	try:
 		x = ret["--axis-name-delim"]
 		axis_names_delim = x
 	except KeyError:
@@ -295,6 +315,8 @@ def parse_opts(cmd_args):
 		header_parser_opts = ''
 	
 	return (ret,args)
+
+
 
 # Return 	
 def parse_dirmode(file_list):
@@ -401,17 +423,44 @@ def get_gnuplot_variables():
 	# Get legend spec
 	gnuplot_variables.append(legend_spec)
 	
+	# Get annotate switch
+	if annotate == True:
+		gnuplot_variables.append("True")
+	else:
+		gnuplot_variables.append("False")
+	
 	return gnuplot_variables
 
 # Create gnuplot command
 def gnuplot_command(gnuplot_variables,file_list,gen_list):
 	gnuplot_command = ""
 	gnuplot_script_vars = ""
+	gnuplot_label_vars = ""
 	parser_output = []
 	file_gen,dir_gen = gen_list
 	
 	# Create common variables string
 	var = [x+'\'%s\';' % (gnuplot_variables[pds.script_onedf_opts.index(x)]) for x in pds.script_onedf_opts]
+	
+	# Run the parser for common values if required
+	if annotate:
+		varc = 0
+		cmd = []
+		if annotate_sel == '':
+			cmd = ['./plotdat_hp','-c']
+		else:
+			cmd = ['./plotdat_hp','-ct',annotate_sel]
+		for f in file_list:
+			cmd.append(f)
+		parser_output = run_header_parser_ext(cmd)
+		
+		for i in range(10):
+			try:
+				gnuplot_label_vars += "common_info%i='%s';" % (i+1,"".join(parser_output[i].split('\t')))
+			except IndexError:
+				gnuplot_label_vars += "common_info%i='%s';" % (i+1,"")
+		
+		#sys.exit(-1)
 	
 	# Handle operation modes
 	if catenate == False and _3D_mode == False:
@@ -446,7 +495,7 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 				outfilename = outfilename + '_' + "_".join(dir_gen[i])
 			
 			# Generate command string with all arguments. override previous definition of output_file_name
-			gnuplot_script_vars = "-e \"%s;data_file_name='%s';output_file_name='%s';header_length='%s';parser_data='%s';\"" % ("".join(var),file_list[i],outfilename,parser_output[0]," ".join(parser_output[1:]))
+			gnuplot_script_vars = "-e \"%s%sdata_file_name='%s';output_file_name='%s';header_length='%s';parser_data='%s';\"" % ("".join(var),gnuplot_label_vars,file_list[i],outfilename,parser_output[0]," ".join(parser_output[1:]))
 			gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_onedf)
 			
 			# Call gnuplot
@@ -460,9 +509,8 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		parser_outlist = []
 		file_gen_list = ["_".join(x) for x in file_gen]
 		
+		# Run the header parser if required
 		for i in range(len(file_list)):
-			
-			# Run the header parser if required
 			if header_parser_opts != '':
 				parser_output = run_header_parser(header_parser_opts,file_list[i])
 			
@@ -478,10 +526,11 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 				
 			parser_outlist.append(parser_output)
 		
+		# gnuplot array delimiter character is space character
 		header_lengths = " ".join([x[0] for x in parser_outlist])
-		header_info = " ".join(["".join(x[1:]) for x in parser_outlist])
+		header_info = " ".join(["_".join(x[1:]) for x in parser_outlist])
 		
-		gnuplot_script_vars = "-e \"%s;file_list='%s';file_gen_list='%s';header_lengths='%s';parser_data='%s';\"" % ("".join(var)," ".join(file_list)," ".join(file_gen_list),header_lengths,header_info)
+		gnuplot_script_vars = "-e \"%s%sfile_list='%s';file_gen_list='%s';header_lengths='%s';parser_data='%s';\"" % ("".join(var),gnuplot_label_vars," ".join(file_list)," ".join(file_gen_list),header_lengths,header_info)
 		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_multidf)
 		
 		ret = sp.call(gnuplot_command,shell=True) # trusted input?? likely not, may need more sanitizing
@@ -515,3 +564,144 @@ def run_header_parser(options,filename):
 	output = output.split('\n')
 	return output
 
+# Invoke header parser
+def run_header_parser_ext(command):
+	# Call the parser
+	proc = sp.Popen(command,stdout=sp.PIPE)
+	output,err = proc.communicate()
+	exit = proc.wait()
+	output = output.split('\n')
+	output = [x for x in output if x != '']
+	return output
+
+#
+#------------------------------------------------------------------------------------------
+#						Header Parser Functions and Global Variables
+#------------------------------------------------------------------------------------------
+#
+
+# plotdat_hp global vars
+auto = False						# auto tag detection
+tags_list = []						# list of tags
+tags_regex = "(.*)\:(.*)"			# regular expression for matching tags and their values
+tag_regex = "(%s)\:(.*)"
+get_common = False					# find common mode
+header_delimit_line = "\n"			# line that delimits the header from the data
+
+# header parser options
+def hp_parse_opts(cmd_args):
+	global auto
+	global tags_list
+	global tags_regex
+	global tag_regex
+	global get_common
+	global header_delimit_line
+	optlist = []
+	args = []
+	
+	# Get options and file name(s)
+	try:
+		optlist, args = getopt.gnu_getopt(cmd_args,pds.hp_short_options)
+	except getopt.GetoptError as e:
+		print "ERROR: getopt: '%s'." % (e.msg)
+		return (None,None)
+
+	if len(args) == 0:
+		print "ERROR: plotdat_hp: No files passed."
+		return (None,None)
+	
+	for f in args:
+		try:
+			fd = open(f,"r")
+			fd.close()
+		except IOError as e:
+			errno,msg = e
+			print "ERROR: open: '[%i] %s'." % (errno,msg)
+			return (None,None)
+
+	# Reformat option list
+	optdict = {}
+	for opt,arg in optlist:
+		optdict[opt] = arg
+
+	# Handle options
+	try:
+		x = optdict["-c"]
+		get_common = True
+	except KeyError as e:
+		pass
+
+	try:
+		x = optdict["-t"]
+		tags_list = x.split('\\')
+	except KeyError as e:
+		if not get_common:
+			print "ERROR: plotdat_hp: -t option is required."
+			return (None,None)
+		else:
+			auto = True
+
+	try:
+		x = optdict["-r"]
+		tag_regex = x
+	except KeyError as e:
+		pass
+	
+	try:
+		x = optdict["-R"]
+		tags_regex = x
+	except KeyError as e:
+		pass
+	
+	return (optdict,args)
+
+# Get header length and it's string from one file
+def header_data(filename):
+	found_delim = False
+	header_lines = []
+	header_length = 0
+	lines_read = 0
+	fd = None
+	
+	try:
+		fd = open(filename,'r')
+	except IOError:
+		print "ERROR: header_data: Invalid data file name '%s'." % filename
+		return (None,None)
+	
+	# Get header lines
+	for line in fd:
+		if line == header_delimit_line:
+			found_delim = True
+		if not found_delim:
+			header_lines.append(line)
+			header_length += 1
+		lines_read += 1
+	header_string = "".join(header_lines)
+	
+	fd.close()
+	
+	# Analyse header lines
+	if lines_read - header_length == 0:
+		print "No header in data file '%s'." % filename
+		return (None,None)
+	elif lines_read - header_length == 1:
+		print "Header delimiting line found at top of file '%s'." % filename
+		return (None,None)
+	
+	return (header_length,header_string)
+
+# Find requested tab values
+def header_tag(header_string):
+	tag_matches = []
+	for tag in tags_list:
+		res = re.findall(tag_regex % tag,header_string)
+		if res == []:
+			continue
+		tag_matches.append(res)
+	return tag_matches
+
+# Find all tab values
+def header_tags(header_string):
+	return re.findall(tags_regex,header_string)
+	

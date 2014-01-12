@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"
+ [<!ENTITY mathml "http://www.w3.org/1998/Math/MathML">]>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="generator" content="groff -Txhtml, see www.gnu.org"/>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
+<meta name="Content-Style" content="text/css"/>
+<style type="text/css">
+       .center { text-align: center }
+       .right  { text-align: right }
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<!-- Creator     : groff version 1.21 -->
+<!-- CreationDate: Sun Jan 12 18:22:25 2014 -->
+<title>PLOTDAT_HP</title>
+
+</head>
+<body>
+
+<h1>PLOTDAT_HP</h1>
+
+<p><a href="#heading1">NAME</a><br/>
+<a href="#heading2">SYNOPSIS</a><br/>
+<a href="#heading3">DESCRIPTION</a><br/>
+<a href="#heading4">SHORT OPTIONS</a><br/>
+<a href="#heading5">EXAMPLES</a><br/>
+<a href="#heading6">ENVIRONMENT</a><br/>
+<a href="#heading7">DIAGNOSTICS</a><br/>
+<a href="#heading8">BUGS</a><br/>
+<a href="#heading9">LICENSE</a><br/>
+<a href="#heading10">AUTHOR</a><br/>
+<a href="#heading11">SEE ALSO</a><br/>
+
+</p>
+<hr/>
+
+
+<h2 id="heading1">NAME
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">plotdat_hp
+&minus; extract data file header information for use with
+<b>plotdat(1)</b></p>
+
+<h2 id="heading2">SYNOPSIS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>plotdat_hp
+-t</b> <i>tag-list</i> <b>[-c] [-r</b> <i>reg-expr</i> <b>]
+[-R</b> <i>reg-expr</i> <b>]</b> <i>data-files</i>
+<b>...</b></p>
+
+<h2 id="heading3">DESCRIPTION
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>plotdat_hp</b>
+searches through the provided data file and extracts the
+required information from it&rsquo;s header if it exists and
+prints it to <i>stdout.</i> If there are no errors, the
+output should always be more than one line long.
+<b>plotdat_hp</b> will first print the number of header
+lines found, then it will print the tags matched with the
+<b>-t</b> option. The header information is searched using
+regular expressions, and can be overriden to suit a
+particular data format. The default form of the regular
+expression uses a &rsquo;:&rsquo; character to distinguish
+tags from their values. When matching a particular tag, the
+string used as a regular expression is
+&quot;(%s)\:(.*)&quot; where the tag name is substituted
+into %s. When trying to gather common information from
+header lines over multiple files, the regular expression
+&quot;(.*)\:(.*)&quot; is used to find any tag with
+it&rsquo;s associated value. When the tags are found, they
+are reformatted to contain no spaces to prevent errors when
+they are passed to the gnuplot scripts (see
+<b>plotdat(1)</b> for details). If errors and exceptions are
+encountered, the desired behaviour is that a single line
+containing the error should be printed, which is interpreted
+as a failure to find the desired tags in
+&rsquo;plotdat&rsquo;. Should there be no error message on
+stdout, &rsquo;plotdat&rsquo; interprets this as a fatal
+parser error.</p>
+
+<h2 id="heading4">SHORT OPTIONS
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="8%" class="center"></col>
+<col width="60%"></col>
+<col width="18%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">-c</p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">Find information common to all
+headers.</p> </td>
+<td>
+</td></tr>
+</table>
+
+<p style="margin-left:11%;">-t tag-list</p>
+
+<p style="margin-left:22%;">Tag list to find values for,
+delimited by &rsquo;\&rsquo; characters.</p>
+
+<p style="margin-left:11%;">-r reg-expr</p>
+
+<p style="margin-left:22%;">Override the regular expression
+that matches tags provided with the <b>-t</b> option.</p>
+
+<p style="margin-left:11%;">-R reg-expr</p>
+
+<p style="margin-left:22%;">Override the regular expression
+that finds arbitrary tags.</p>
+
+<h2 id="heading5">EXAMPLES
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Default
+usage:</p>
+
+<p style="margin-left:22%;">$ plotdat_hp -t &quot;V1&quot;
+file.dat <br/>
+V1=1V <br/>
+V2=032V <br/>
+V3=2.2V <br/>
+$</p>
+
+<p style="margin-left:11%;">Overriding regular
+expressions:</p>
+
+<p style="margin-left:22%;">$ plotdat_hp -t &quot;V1&quot;
+-r &quot;(%s)\=(.*)&quot; file.dat <br/>
+V1=1V <br/>
+V2=032V <br/>
+V3=2.2V <br/>
+$</p>
+
+<h2 id="heading6">ENVIRONMENT
+</h2>
+
+
+<h2 id="heading7">DIAGNOSTICS
+</h2>
+
+
+<h2 id="heading8">BUGS
+</h2>
+
+
+<h2 id="heading9">LICENSE
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This software
+is licensed under the terms of the GPLv2 license, see the
+LICENSE.md file that came with the current package.</p>
+
+<h2 id="heading10">AUTHOR
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Louis Fry
+&lt;lfry513 at googlemail dot com&gt;</p>
+
+<h2 id="heading11">SEE ALSO
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>plotdat</b>(1)</p>
+<hr/>
+</body>
+</html>

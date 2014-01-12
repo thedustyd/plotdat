@@ -1,4 +1,5 @@
-.\" groff -man -Tascii plotdat.1
+.\" groff -man -Tascii mandb/plotdat.1 > PLOTDAT.txt
+.\" groff -man -Txhtml mandb/plotdat.1 > PLOTDAT.html
 .TH PLOTDAT 1 "JANUARY 2014" Linux "User Manuals"
 .SH NAME
 plotdat \- plot graphs from many data files
@@ -115,11 +116,11 @@ for details about the regular expressions and how they are overriden. Since the 
 .IP "Using many features:"
 plotdat -ca "Voltage (V)\\Current (A)" -m "2 3" -M "I_CD I_AB" *.dat --header-parser "-t,Vout1\\Vout2" --filemode-gen "2 3"
 
-With the information from the two previous examples, this command will create a single graph, with all curves having names "I_CD_1A_T=50K_Vout1=1mV_Vout2=54nV", "I_AB_1A_T=50K_Vout1=1mV_Vout2=54nV", "I_CD_1B_T=50K_Vout1=2mV_Vout2=72nV" and so on.
+With the information from the two previous examples, this command will create a single graph, with all curves having names "I_CD_1A_T=50K Vout1=1mV_Vout2=54nV", "I_AB_1A_T=50K Vout1=1mV_Vout2=54nV", "I_CD_1B_T=50K_Vout1=2mV Vout2=72nV" and so on.
 
-Without the
+Whereas without the
 .B -c
-option a graph for each data file will be created, and the names would be "I_CD_1A_T=50K Vout1=1mV Vout2=54nV", "I_AB_1A_T=50K Vout1=1mV Vout2=54nV", "I_CD_1B_T=50K Vout1=2mV Vout2=72nV" and so on.
+option a graph for each data file will be created, and the names would be "I_CD_1A_T=50K Vout1=1mV Vout2=54nV", "I_AB_1A_T=50K Vout1=1mV Vout2=54nV" in one file, then "I_CD_1B_T=50K Vout1=2mV Vout2=72nV" and so on.
 
 .SH FILES
 .I onedf.plt
@@ -139,7 +140,7 @@ Depends on how the program is used.
 .br
 Column names can only be delimited by characters, this could perhaps be solved.
 .SH LICENSE
-This software is licensed under the terms of the GPLv2 license, see the LICENSE.md file that came with the current package.
+This software is distributed under the terms of the GPLv2 license, see the LICENSE.md file that came with the current package.
 .SH AUTHOR
 Louis Fry <lfry513 at googlemail dot com>
 .SH "SEE ALSO"
