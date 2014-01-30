@@ -43,7 +43,7 @@ hp_short_options = \
 long_options = \
 [
 	'3D-mode',
-	'annotate',
+	'annotate=',
 	'axis-names-delim=',
 	'catenate',
 	'dirmode-gen-delim=',

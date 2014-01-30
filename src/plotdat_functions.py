@@ -19,6 +19,7 @@ import getopt				# argument parsing
 import subprocess as sp		# command line access
 import re					# regular expressions
 import sys
+import os
 import plotdat_strings as pds
 
 #
@@ -54,6 +55,14 @@ sel_col_names = ''
 xaxis_range = ''
 yaxis_range = ''
 zaxis_range = ''
+
+# Environment configuration check
+def env_check():
+	# Check config file directory exists
+	if not os.path.exists(pds.config_path):
+		print "ERROR: env_check: No configuration directory '%s'." % pds.config_path
+		return False
+	return True
 
 # Printing
 def vprint(message):

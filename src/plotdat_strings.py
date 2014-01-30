@@ -28,6 +28,9 @@ help = \
 
 """
 
+# Config files directory
+config_path = "~/.plotdat"
+
 # Description
 plotdat_desc = \
 "plotdat.py takes given text data files and creates graphs with the specified characteristics. The format of data files can be partially adapted using options."
