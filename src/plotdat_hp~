@@ -21,6 +21,7 @@
 # Python specific
 import os
 import sys
+sys.path.append('/usr/local/lib/plotdatlib')
 import getopt
 import re
 
@@ -76,8 +77,7 @@ else:
 		if pdf.auto:
 			all_tags.append(re.findall(pdf.tags_regex,header_string))
 		else:
-			all_tags.append(pdf.header_tag(header_string)[0])
-	print all_tags
+			all_tags.append(pdf.header_tag(header_string)[0]) # hack
 	
 	# Find keys common to all files and check their values
 	tresults = {}

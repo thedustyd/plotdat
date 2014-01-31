@@ -15,8 +15,8 @@
 # GNU General Public License for more details.
 #
 
-import getopt				# argument parsing
-import subprocess as sp		# command line access
+import getopt					# argument parsing
+import subprocess as sp				# command line access
 import re					# regular expressions
 import sys
 import os
@@ -59,7 +59,7 @@ zaxis_range = ''
 # Environment configuration check
 def env_check():
 	# Check config file directory exists
-	if not os.path.exists(pds.config_path)
+	if not os.path.exists(pds.config_path):
 		print "ERROR: env_check: No configuration directory '%s'." % pds.config_path
 		return False
 	return True
@@ -303,7 +303,7 @@ def parse_opts(cmd_args):
 		x = ret["--gnuplot-options"]
 		gnuplot_options = x
 	except KeyError:
-		gnuplot_options = '-noraise'
+		gnuplot_options = ''
 	
 	try:
 		x = ret["--header-delim"]

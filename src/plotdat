@@ -35,8 +35,8 @@ if optdict == None or args == None:
 	sys.exit(-1)
 
 # Check environment
-if not pdf.env_check():
-	sys.exit(-1)
+#if not pdf.env_check():
+#	sys.exit(-1)
 
 pdf.vprint("%i Files to Process.\n%i Options Passed." % (len(args),len(optdict)))
 pdf.dprint("sel_col_numbers: %s.\nsel_col_names: %s." % (pdf.sel_col_numbers,pdf.sel_col_names))

@@ -15,8 +15,8 @@
 # GNU General Public License for more details.
 #
 
-import getopt				# argument parsing
-import subprocess as sp		# command line access
+import getopt					# argument parsing
+import subprocess as sp				# command line access
 import re					# regular expressions
 import sys
 import os
@@ -303,7 +303,7 @@ def parse_opts(cmd_args):
 		x = ret["--gnuplot-options"]
 		gnuplot_options = x
 	except KeyError:
-		gnuplot_options = '-noraise'
+		gnuplot_options = ''
 	
 	try:
 		x = ret["--header-delim"]
