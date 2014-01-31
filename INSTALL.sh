@@ -78,15 +78,17 @@ install --mode go-w,ugo+rx $source_dir/*.py $lib_dir
 
 # Copy the executables
 install --mode go-w,ugo+rx $source_dir/plotdat $source_dir/plotdat_hp $exec_dir
-sed -i "/import sys/a\sys.path.append('/usr/local/lib/plotdatlib')" $exec_dir/plotdat
-sed -i "/import sys/a\sys.path.append('/usr/local/lib/plotdatlib')" $exec_dir/plotdat_hp
+sed -i "/import sys/a\sys.path.append('$lib_dir')" $exec_dir/plotdat
+sed -i "/import sys/a\sys.path.append('$lib_dir')" $exec_dir/plotdat_hp
 
 # Copy man pages to man directory
 install --mode go-w,ugo+rx mandb/plotdat.1 mandb/plotdat_hp.1 $man_dir
 gzip $man_dir/plotdat.1
 gzip $man_dir/plotdat_hp.1
 
-# Update PATH
-sed -i "$ a\export PATH=$PATH:$exec_dir" $env_config
-
+# Update PATH if required
+echo $PATH | grep $exec_dir
+if [ $? -eq 1 ]; then
+	sed -i "$ a\export PATH=$PATH:$exec_dir" $env_config
+fi
 echo " Done."
