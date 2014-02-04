@@ -1,8 +1,9 @@
 #!/bin/sh
 #
-# Linux installation script. Need root permissions to install.
+# Linux installation script. Need root permissions to install. Read
+# carefully to avoid problems.
 #
-# Compatible with:
+# Works on:
 #
 #	- Debian 7.4
 #

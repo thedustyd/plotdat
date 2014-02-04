@@ -24,9 +24,7 @@ conditions; see the license file provided for details."""
 
 # Help
 help = \
-"""
-
-"""
+"""See man 1 plotdat."""
 
 # Config files directory
 config_path = "~/.plotdat"

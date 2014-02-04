@@ -44,7 +44,7 @@ do for [j=1:words(file_list)] {
 	if (file_gen_list ne '') {
 		fgl_string = "_".word(file_gen_list,j)
 	}
-	
+	#print word(parser_data,j)
 	arg_string = arg_string.sprintf(arg_prototype,data_col_numbers,word(file_list,j),word(header_lengths,j),data_col_numbers,data_col_names,fgl_string,word(parser_data,j))
 	
 	if (j < words(file_list)) {

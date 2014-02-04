@@ -2,7 +2,7 @@
 #
 #	All options:
 #
-#	-c					: Get common tag values
+#	-c				: Get common tag values
 #	-t [tags]			: Get value of tags provided
 #	-r [regex]			: python re package regular expression string to match tags
 #	-R [regex]			: python re package regular expression string to match single tag (override)
@@ -71,13 +71,14 @@ else:
 		header_length, header_string = pdf.header_data(f)
 		if header_length == None or header_string == None:
 			sys.exit(-1)
-		
+
 		# Get all tags
 		if pdf.auto:
 			all_tags.append(re.findall(pdf.tags_regex,header_string))
 		else:
 			all_tags.append(pdf.header_tag(header_string)[0]) # hack
-	
+	print header_length
+
 	# Find keys common to all files and check their values
 	tresults = {}
 	vresults = {}
@@ -100,7 +101,7 @@ else:
 				except KeyError:
 					vresults[t0] = 2 # account for reference header
 	
-	# Find key that the same value in each file
+	# Find key that has the same value in each file
 	final = [k for k,v in vresults.items() if v == len(args)]
 	if final == []:	# silent error
 		sys.exit(-1)
@@ -109,5 +110,5 @@ else:
 	for tlist in all_tags[0]:
 		t0, v0 = tlist
 		if t0 in final:
-			print "%s=%s" % (t0,v0)
+			print "%s=%s" % ("".join(t0.strip(":\t").split(" ")),"".join(v0.strip("\t").split(" ")))
 

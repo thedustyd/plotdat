@@ -456,9 +456,9 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		varc = 0
 		cmd = []
 		if annotate_sel == '':
-			cmd = ['./plotdat_hp','-c']
+			cmd = ['plotdat_hp','-c']
 		else:
-			cmd = ['./plotdat_hp','-ct',annotate_sel]
+			cmd = ['plotdat_hp','-ct',annotate_sel]
 		for f in file_list:
 			cmd.append(f)
 		parser_output = run_header_parser_ext(cmd)
@@ -505,7 +505,7 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 			
 			# Generate command string with all arguments. override previous definition of output_file_name
 			gnuplot_script_vars = "-e \"%s%sdata_file_name='%s';output_file_name='%s';header_length='%s';parser_data='%s';\"" % ("".join(var),gnuplot_label_vars,file_list[i],outfilename,parser_output[0]," ".join(parser_output[1:]))
-			gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_onedf)
+			gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.config_path+"/"+pds.script_onedf)
 			
 			# Call gnuplot
 			ret = sp.call(gnuplot_command,shell=True) # trusted input?? likely not, may need more sanitizing
@@ -522,25 +522,30 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		for i in range(len(file_list)):
 			if header_parser_opts != '':
 				parser_output = run_header_parser(header_parser_opts,file_list[i])
-			
+				
 				if len(parser_output) == 0:
 					print "ERROR: plotdat_hp: Unhandled exception. Please fix."
 					sys.exit(-1)
 			
 				if len(parser_output) < 2:
 					print "WARN: plotdat_hp: %s" % (parser_output[0].strip('\n'))
-					parser_output.append["None"]
+					parser_output.append("None")
 			else:
 				parser_output.extend(["0",""])
 				
 			parser_outlist.append(parser_output)
 		
 		# gnuplot array delimiter character is space character
-		header_lengths = " ".join([x[0] for x in parser_outlist])
-		header_info = " ".join(["_".join(x[1:]) for x in parser_outlist])
+		if header_parser_opts != '':
+			header_lengths = " ".join([x[0] for x in parser_outlist])
+			header_info = " ".join(["_".join(x[1:]) for x in parser_outlist])
+		else:
+			header_info = ""
+			header_lengths = " ".join(["0" for x in parser_outlist])
+		
 		
 		gnuplot_script_vars = "-e \"%s%sfile_list='%s';file_gen_list='%s';header_lengths='%s';parser_data='%s';\"" % ("".join(var),gnuplot_label_vars," ".join(file_list)," ".join(file_gen_list),header_lengths,header_info)
-		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_multidf)
+		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.config_path+"/"+pds.script_multidf)
 		
 		ret = sp.call(gnuplot_command,shell=True) # trusted input?? likely not, may need more sanitizing
 		if ret != 0:
@@ -549,20 +554,20 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		
 	elif catenate == False and _3D_mode == True:
 		gnuplot_script_vars = "-e \"%s\"" % ("".join(var))
-		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_3D_onedf)
+		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.config_path+"/"+pds.script_3D_onedf)
 		
 		
 	elif catenate == True and _3D_mode == True:
 		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_3D_multidf_opts.index(x)]) for x in pds.script_3D_multidf_opts]
 		gnuplot_script_vars = "-e \"%s\"" % ("".join(var))
-		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.script_3D_multidf)
+		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.config_path+"/"+pds.script_3D_multidf)
 	
 	return -1
 
 # Invoke header parser
 def run_header_parser(options,filename):
 	# Create command
-	command = ["./plotdat_hp"]
+	command = ["plotdat_hp"]
 	command.extend(options.split(','))
 	command.append(filename)
 	

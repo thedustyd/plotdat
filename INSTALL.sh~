@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-# Linux installation script. Need root permissions to install.
+# Linux installation script. Need root permissions to install. Read
+# carefully to avoid problems.
 #
 # Compatible with:
 #
@@ -86,7 +87,7 @@ install --mode go-w,ugo+rx mandb/plotdat.1 mandb/plotdat_hp.1 $man_dir
 gzip $man_dir/plotdat.1
 gzip $man_dir/plotdat_hp.1
 
-# Update PATH
+# Update PATH if required
 echo $PATH | grep $exec_dir
 if [ $? -eq 1 ]; then
 	sed -i "$ a\export PATH=$PATH:$exec_dir" $env_config
