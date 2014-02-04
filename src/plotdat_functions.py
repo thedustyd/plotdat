@@ -448,9 +448,6 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 	parser_output = []
 	file_gen,dir_gen = gen_list
 	
-	# Create common variables string
-	var = [x+'\'%s\';' % (gnuplot_variables[pds.script_onedf_opts.index(x)]) for x in pds.script_onedf_opts]
-	
 	# Run the parser for common values if required
 	if annotate:
 		varc = 0
@@ -475,6 +472,9 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 	if catenate == False and _3D_mode == False:
 		ret = -1
 		outfilename = ""
+		
+		# Create common variables string
+		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_onedf_opts.index(x)]) for x in pds.script_onedf_opts]
 		
 		# Call gnuplot for every data file
 		for i in range(len(file_list)):
@@ -518,6 +518,9 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		parser_outlist = []
 		file_gen_list = ["_".join(x) for x in file_gen]
 		
+		# Create common variables string
+		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_multidf_opts.index(x)]) for x in pds.script_multidf_opts]
+		
 		# Run the header parser if required
 		for i in range(len(file_list)):
 			if header_parser_opts != '':
@@ -553,6 +556,7 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		return ret
 		
 	elif catenate == False and _3D_mode == True:
+		var = [x+'\'%s\';' % (gnuplot_variables[pds.script_3D_onedf_opts.index(x)]) for x in pds.script_3D_onedf_opts]
 		gnuplot_script_vars = "-e \"%s\"" % ("".join(var))
 		gnuplot_command = "gnuplot %s %s %s" % (gnuplot_options,gnuplot_script_vars,pds.config_path+"/"+pds.script_3D_onedf)
 		

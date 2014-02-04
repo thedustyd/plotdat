@@ -462,7 +462,7 @@ def gnuplot_command(gnuplot_variables,file_list,gen_list):
 		for f in file_list:
 			cmd.append(f)
 		parser_output = run_header_parser_ext(cmd)
-		print "Annotate parser output:\n",parser_output
+		
 		for i in range(10):
 			try:
 				gnuplot_label_vars += "common_info%i='%s';" % (i+1,"".join(parser_output[i].split('\t')))
